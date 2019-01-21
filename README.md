@@ -12,3 +12,4 @@ Install with [npm](https://npmjs.org/):
 ```
 $ npm install -g gendiff-s401
 ```
+[![asciicast](https://asciinema.org/a/8s3v2CYYWukZ7GONNDav8yeGE.svg)](https://asciinema.org/a/8s3v2CYYWukZ7GONNDav8yeGE)
