@@ -13,3 +13,10 @@ Install with [npm](https://npmjs.org/):
 $ npm install -g gendiff-s401
 ```
 [![asciicast](https://asciinema.org/a/8s3v2CYYWukZ7GONNDav8yeGE.svg)](https://asciinema.org/a/8s3v2CYYWukZ7GONNDav8yeGE)
+
+Compare two JSON files:
+
+```
+$ gendiff <firstConfig> <secondConfig>
+```
+[![asciicast](https://asciinema.org/a/wcObRSLn0ceDrZaKfKqkC539g.svg)](https://asciinema.org/a/wcObRSLn0ceDrZaKfKqkC539g)
