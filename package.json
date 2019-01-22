@@ -2,7 +2,7 @@
   "name": "gendiff-s401",
   "version": "0.2.0",
   "description": "A tool to show the difference between two configuration files",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "watch": "jest --watch",
