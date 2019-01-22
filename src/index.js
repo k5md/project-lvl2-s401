@@ -7,7 +7,7 @@ const format = (key, value, sign, indentation = '  ') => {
   return `${indentation}${indentation}${key}: ${value}`;
 };
 
-const genDiff = ({ firstConfig, secondConfig, formatType }) => {
+const genDiff = ({ firstConfig, secondConfig }) => {
   const firstFile = fs.readFileSync(path.resolve(__dirname, firstConfig), 'utf-8');
   const secondFile = fs.readFileSync(path.resolve(__dirname, secondConfig), 'utf-8');
 
