@@ -1,6 +1,6 @@
 {
   "name": "gendiff-s401",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A tool to show the difference between two configuration files",
   "main": "dist/index.js",
   "scripts": {
