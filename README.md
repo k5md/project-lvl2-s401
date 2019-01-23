@@ -24,3 +24,7 @@ $ gendiff <firstConfig> <secondConfig>
 Yaml
 
 [![asciicast](https://asciinema.org/a/3eIEjBAOr7JVM7iHYE0GP2iGg.svg)](https://asciinema.org/a/3eIEjBAOr7JVM7iHYE0GP2iGg)
+
+INI
+
+[![asciicast](https://asciinema.org/a/CTYsE5TjuTtPm4dwxrB9td3Ma.svg)](https://asciinema.org/a/CTYsE5TjuTtPm4dwxrB9td3Ma)
