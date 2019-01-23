@@ -8,7 +8,6 @@ const format = (key, value, sign, indentation = '  ') => {
 };
 
 const genDiff = (firstConfig, secondConfig) => {
-  console.log(firstConfig, secondConfig);
   const firstFile = fs.readFileSync(path.resolve(firstConfig), 'utf-8');
   const secondFile = fs.readFileSync(path.resolve(secondConfig), 'utf-8');
 
