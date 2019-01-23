@@ -2,10 +2,11 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
-const testedExtensions = ['json', 'yml'];
+const supportedExtensions = ['json', 'yml', 'ini'];
 
-testedExtensions.forEach((extension) => {
-  test(`outputs the difference between ${extension} files`, () => {
+test.each(supportedExtensions)(
+  'outputs the difference between %s files',
+  (extension) => {
     const firstConfig = path.resolve(__dirname, `__fixtures__/before.${extension}`);
     const secondConfig = path.resolve(__dirname, `__fixtures__/after.${extension}`);
     const fixturePath = path.resolve(__dirname, `__fixtures__/${extension}Fixture.txt`);
@@ -14,5 +15,5 @@ testedExtensions.forEach((extension) => {
     const actualDiff = genDiff(firstConfig, secondConfig);
 
     expect(actualDiff).toBe(expectedDiff);
-  });
-});
+  },
+);

@@ -1,0 +1,8 @@
+{
+    same: value
+  - existsInA: true
+  + different: 21
+  - different: 42
+    both: haveTheSameKeyValue
+  + existsInB: null
+}
