@@ -8,36 +8,36 @@ const format = (key, value, sign, indentation = '  ') => {
   return `${indentation}${indentation}${key}: ${value}`;
 };
 
-const genDiff = (firstConfig, secondConfig) => {
-  const firstFile = fs.readFileSync(path.resolve(firstConfig), 'utf-8');
-  const secondFile = fs.readFileSync(path.resolve(secondConfig), 'utf-8');
+const genDiff = (filepath1, filepath2) => {
+  const content1 = fs.readFileSync(path.resolve(filepath1), 'utf-8');
+  const content2 = fs.readFileSync(path.resolve(filepath2), 'utf-8');
 
-  const firstExtension = path.extname(firstConfig);
-  const secondExtension = path.extname(secondConfig);
+  const extension1 = path.extname(filepath1);
+  const extension2 = path.extname(filepath2);
 
-  const firstJson = parse(firstExtension)(firstFile);
-  const secondJson = parse(secondExtension)(secondFile);
+  const parsedContent1 = parse(extension1)(content1);
+  const parsedContent2 = parse(extension2)(content2);
 
-  const firstModSign = '-';
-  const secondModSign = '+';
+  const modificationSign1 = '-';
+  const modificationSign2 = '+';
 
-  const keysMerged = _.union(Object.keys(firstJson), Object.keys(secondJson));
+  const keysMerged = _.union(Object.keys(parsedContent1), Object.keys(parsedContent2));
   const diff = keysMerged.reduce((acc, key) => {
-    if (firstJson[key] === secondJson[key]) {
-      return [...acc, format(key, firstJson[key])];
+    if (parsedContent1[key] === parsedContent2[key]) {
+      return [...acc, format(key, parsedContent1[key])];
     }
 
-    if (_.has(firstJson, key) && _.has(secondJson, key)) {
+    if (_.has(parsedContent1, key) && _.has(parsedContent2, key)) {
       return [
         ...acc,
-        format(key, secondJson[key], secondModSign),
-        format(key, firstJson[key], firstModSign),
+        format(key, parsedContent2[key], modificationSign2),
+        format(key, parsedContent1[key], modificationSign1),
       ];
     }
 
-    return _.has(firstJson, key)
-      ? [...acc, format(key, firstJson[key], firstModSign)]
-      : [...acc, format(key, secondJson[key], secondModSign)];
+    return _.has(parsedContent1, key)
+      ? [...acc, format(key, parsedContent1[key], modificationSign1)]
+      : [...acc, format(key, parsedContent2[key], modificationSign2)];
   }, []);
 
   return `{\n${diff.join('\n')}\n}`;
