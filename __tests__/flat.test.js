@@ -2,13 +2,17 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
-test('outputs the difference between json files', () => {
-  const firstConfig = path.resolve(__dirname, '__fixtures__/before.json');
-  const secondConfig = path.resolve(__dirname, '__fixtures__/after.json');
-  const fixturePath = path.resolve(__dirname, '__fixtures__/flatFixture.txt');
+const testedExtensions = ['json', 'yml'];
 
-  const expected = fs.readFileSync(fixturePath, 'utf-8');
-  const actual = genDiff(firstConfig, secondConfig);
+testedExtensions.forEach((extension) => {
+  test(`outputs the difference between ${extension} files`, () => {
+    const firstConfig = path.resolve(__dirname, `__fixtures__/before.${extension}`);
+    const secondConfig = path.resolve(__dirname, `__fixtures__/after.${extension}`);
+    const fixturePath = path.resolve(__dirname, `__fixtures__/${extension}Fixture.txt`);
 
-  expect(actual).toBe(expected);
+    const expectedDiff = fs.readFileSync(fixturePath, 'utf-8');
+    const actualDiff = genDiff(firstConfig, secondConfig);
+
+    expect(actualDiff).toBe(expectedDiff);
+  });
 });

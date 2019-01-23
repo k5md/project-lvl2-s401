@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
+import parse from './parsers';
 
 const format = (key, value, sign, indentation = '  ') => {
   if (sign) return `${indentation}${sign} ${key}: ${value}`;
@@ -11,8 +12,11 @@ const genDiff = (firstConfig, secondConfig) => {
   const firstFile = fs.readFileSync(path.resolve(firstConfig), 'utf-8');
   const secondFile = fs.readFileSync(path.resolve(secondConfig), 'utf-8');
 
-  const firstJson = JSON.parse(firstFile);
-  const secondJson = JSON.parse(secondFile);
+  const firstExtension = path.extname(firstConfig);
+  const secondExtension = path.extname(secondConfig);
+
+  const firstJson = parse(firstExtension)(firstFile);
+  const secondJson = parse(secondExtension)(secondFile);
 
   const firstModSign = '-';
   const secondModSign = '+';

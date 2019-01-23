@@ -1,0 +1,7 @@
+{
+    same: value
+  - existsInA: true
+  + different: 21
+  - different: 42
+  + existsInB: null
+}
