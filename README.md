@@ -20,3 +20,7 @@ Compare two JSON files:
 $ gendiff <firstConfig> <secondConfig>
 ```
 [![asciicast](https://asciinema.org/a/wcObRSLn0ceDrZaKfKqkC539g.svg)](https://asciinema.org/a/wcObRSLn0ceDrZaKfKqkC539g)
+
+Yaml
+
+[![asciicast](https://asciinema.org/a/3eIEjBAOr7JVM7iHYE0GP2iGg.svg)](https://asciinema.org/a/3eIEjBAOr7JVM7iHYE0GP2iGg)
