@@ -2,46 +2,51 @@ import _ from 'lodash';
 
 
 const indent = (level, str) => '  '.repeat(level) + str;
+
 const stringify = (object) => {
   if (_.isObject(object)) {
     return _
       .toPairs(object)
-      .map(([key, value]) => `${key}: ${value}`);
+      .map(([key, value]) => `${key}: ${stringify(value)}`);
   }
   return object;
 };
 
-const render = (ast) => {
-  const firstSign = '-';
-  const secondSign = '+';
+const renderIter = (level, ast) => {
+  const sign1 = '-';
+  const sign2 = '+';
 
   const diffStrings = ast.map(({
     key, value1: rawValue1, value2: rawValue2, type, children,
   }) => {
-    if (children) return `    ${key}: ${render(children)}`;
+    if (children) return indent(level + 1, `${key}: {\n${(renderIter(level + 2, children))}\n${indent(level + 1, '}')}`);
 
     const value1 = stringify(rawValue1);
     const value2 = stringify(rawValue2);
 
     switch (type) {
       case 'same': {
-        return `    ${key}: ${value1}`;
+        return indent(level + 1, `${key}: ${value1}`);
       }
       case 'different': {
-        return `  ${firstSign} ${key}: ${value1}\n  ${secondSign} ${key}: ${value2}`;
+        return [indent(level, `${sign1} ${key}: ${value1}`), indent(level, `${sign2} ${key}: ${value2}`)];
       }
       case 'existsOnlyInFirst': {
-        return `  ${firstSign} ${key}: ${value1}`;
+        return indent(level, `${sign1} ${key}: ${value1}`);
       }
       case 'existsOnlyInSecond': {
-        return `  ${secondSign} ${key}: ${value2}`;
+        return indent(level, `${sign2} ${key}: ${value2}`);
       }
       default:
         return;
     }
   });
 
-  return `{\n${diffStrings.join('\n')}\n}`;
+  return _.flatten(diffStrings).join('\n');
+};
+
+const render = (ast) => {
+  return `{\n${renderIter(1, ast)}\n}`;
 };
 
 export default render;
