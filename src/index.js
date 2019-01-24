@@ -2,11 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import parse from './parsers';
-
-const format = (key, value, sign, indentation = '  ') => {
-  if (sign) return `${indentation}${sign} ${key}: ${value}`;
-  return `${indentation}${indentation}${key}: ${value}`;
-};
+import render from './render';
 
 const genDiff = (filepath1, filepath2) => {
   const content1 = fs.readFileSync(path.resolve(filepath1), 'utf-8');
@@ -18,29 +14,35 @@ const genDiff = (filepath1, filepath2) => {
   const parsedContent1 = parse(extension1)(content1);
   const parsedContent2 = parse(extension2)(content2);
 
-  const modificationSign1 = '-';
-  const modificationSign2 = '+';
+  const predicates = {
+    existsOnlyInFirst: (object1, object2, key) => _.has(object1, key) && !_.has(object2, key),
+    existsOnlyInSecond: (object1, object2, key) => _.has(object2, key) && !_.has(object1, key),
+    same: (object1, object2, key) => _.has(object1, key) && _.has(object2, key) && object1[key] === object2[key],
+    different: (object1, object2, key) => _.has(object1, key) && _.has(object2, key) && object1[key] !== object2[key],
+  };
 
-  const keysMerged = _.union(Object.keys(parsedContent1), Object.keys(parsedContent2));
-  const diff = keysMerged.reduce((acc, key) => {
-    if (parsedContent1[key] === parsedContent2[key]) {
-      return [...acc, format(key, parsedContent1[key])];
-    }
+  const makeAst = (object1, object2) => {
+    const mergedKeys = _.union(Object.keys(object1), Object.keys(object2));
 
-    if (_.has(parsedContent1, key) && _.has(parsedContent2, key)) {
-      return [
-        ...acc,
-        format(key, parsedContent2[key], modificationSign2),
-        format(key, parsedContent1[key], modificationSign1),
-      ];
-    }
+    return mergedKeys.map((key) => {
+      const value1 = object1[key];
+      const value2 = object2[key];
+      const type = _.findKey(predicates, predicate => predicate(object1, object2, key));
+      const children = (_.isObject(value1) && _.isObject(value2)) ? makeAst(value1, value2) : null;
 
-    return _.has(parsedContent1, key)
-      ? [...acc, format(key, parsedContent1[key], modificationSign1)]
-      : [...acc, format(key, parsedContent2[key], modificationSign2)];
-  }, []);
+      return {
+        key,
+        value1,
+        value2,
+        type,
+        children,
+      };
+    });
+  };
 
-  return `{\n${diff.join('\n')}\n}`;
+  const ast = makeAst(parsedContent1, parsedContent2);
+  const diff = render(ast);
+  return diff;
 };
 
 export default genDiff;

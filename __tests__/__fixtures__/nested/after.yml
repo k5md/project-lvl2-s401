@@ -1,0 +1,4 @@
+---
+  same: value
+  existsInB: null
+  different: 21
