@@ -3,11 +3,12 @@ import _ from 'lodash';
 
 const indent = (level, str) => '  '.repeat(level) + str;
 
-const stringify = (object) => {
+const stringify = (level, object) => {
+
   if (_.isObject(object)) {
     return _
       .toPairs(object)
-      .map(([key, value]) => `${key}: ${stringify(value)}`);
+      .map(([key, value]) => `{\n${indent(level + 3, '')}${key}: ${stringify(level, value)}\n${indent(level + 1, '}')}`);
   }
   return object;
 };
@@ -21,8 +22,8 @@ const renderIter = (level, ast) => {
   }) => {
     if (children) return indent(level + 1, `${key}: {\n${(renderIter(level + 2, children))}\n${indent(level + 1, '}')}`);
 
-    const value1 = stringify(rawValue1);
-    const value2 = stringify(rawValue2);
+    const value1 = stringify(level, rawValue1);
+    const value2 = stringify(level, rawValue2);
 
     switch (type) {
       case 'same': {
