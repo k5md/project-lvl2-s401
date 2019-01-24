@@ -17,8 +17,12 @@ const genDiff = (filepath1, filepath2) => {
   const predicates = {
     existsOnlyInFirst: (object1, object2, key) => _.has(object1, key) && !_.has(object2, key),
     existsOnlyInSecond: (object1, object2, key) => _.has(object2, key) && !_.has(object1, key),
-    same: (object1, object2, key) => _.has(object1, key) && _.has(object2, key) && object1[key] === object2[key],
-    different: (object1, object2, key) => _.has(object1, key) && _.has(object2, key) && object1[key] !== object2[key],
+    same: (object1, object2, key) => _.has(object1, key)
+      && _.has(object2, key)
+      && object1[key] === object2[key],
+    different: (object1, object2, key) => _.has(object1, key)
+      && _.has(object2, key)
+      && object1[key] !== object2[key],
   };
 
   const makeAst = (object1, object2) => {

@@ -1,10 +1,8 @@
 import _ from 'lodash';
 
-
 const indent = (level, str) => '  '.repeat(level) + str;
 
 const stringify = (level, object) => {
-
   if (_.isObject(object)) {
     return _
       .toPairs(object)
@@ -39,15 +37,13 @@ const renderIter = (level, ast) => {
         return indent(level, `${sign2} ${key}: ${value2}`);
       }
       default:
-        return;
+        return null;
     }
   });
 
   return _.flatten(diffStrings).join('\n');
 };
 
-const render = (ast) => {
-  return `{\n${renderIter(1, ast)}\n}`;
-};
+const render = ast => `{\n${renderIter(1, ast)}\n}`;
 
 export default render;

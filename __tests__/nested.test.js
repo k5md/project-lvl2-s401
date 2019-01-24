@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
-const supportedExtensions = ['json'];
+const supportedExtensions = ['json', 'yml', 'ini'];
 
 test.each(supportedExtensions)(
   'outputs the difference between %s files',

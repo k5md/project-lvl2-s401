@@ -1,4 +1,12 @@
----
-  same: value
-  existsInB: null
-  different: 21
+common: 
+  follow: false
+  setting1: "Value 1"
+  setting3: 
+    key: value
+group1: 
+  baz: bas
+  foo: bar
+  nest: 
+    key: value
+group3: 
+  fee: 100500
