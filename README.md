@@ -21,10 +21,14 @@ $ gendiff <firstConfig> <secondConfig>
 ```
 [![asciicast](https://asciinema.org/a/wcObRSLn0ceDrZaKfKqkC539g.svg)](https://asciinema.org/a/wcObRSLn0ceDrZaKfKqkC539g)
 
-Yaml
+Yaml:
 
 [![asciicast](https://asciinema.org/a/3eIEjBAOr7JVM7iHYE0GP2iGg.svg)](https://asciinema.org/a/3eIEjBAOr7JVM7iHYE0GP2iGg)
 
-INI
+INI:
 
 [![asciicast](https://asciinema.org/a/CTYsE5TjuTtPm4dwxrB9td3Ma.svg)](https://asciinema.org/a/CTYsE5TjuTtPm4dwxrB9td3Ma)
+
+Nested structures support:
+
+[![asciicast](https://asciinema.org/a/2E6U33umv8DfKFTSqbBLyke3i.svg)](https://asciinema.org/a/2E6U33umv8DfKFTSqbBLyke3i)
