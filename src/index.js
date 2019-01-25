@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import parse from './parsers';
+import getParser from './parsers';
 import render from './render';
 
 const makeNode = (key, value, type, children = []) => ({
@@ -50,8 +50,8 @@ const genDiff = (filepath1, filepath2) => {
   const extension1 = path.extname(filepath1);
   const extension2 = path.extname(filepath2);
 
-  const contentObject1 = parse(extension1)(content1);
-  const contentObject2 = parse(extension2)(content2);
+  const contentObject1 = getParser(extension1)(content1);
+  const contentObject2 = getParser(extension2)(content2);
 
   const diff = makeAst(contentObject1, contentObject2);
   const renderedDiff = render(diff);

@@ -3,10 +3,10 @@ import _ from 'lodash';
 const indent = (level, str) => ' '.repeat(level) + str;
 
 const stringify = (level, object) => {
-  if (_.isObject(object)) {
-    return _.toPairs(object).map(([key, value]) => `{\n${indent(level + 6, '')}${key}: ${stringify(level, value)}\n${indent(level, '  }')}`);
+  if (!_.isObject(object)) {
+    return object;
   }
-  return object;
+  return _.toPairs(object).map(([key, value]) => `{\n${indent(level + 6, '')}${key}: ${stringify(level, value)}\n${indent(level, '  }')}`);
 };
 
 const renderIter = (level, ast) => {
