@@ -11,35 +11,21 @@ const stringify = (level, object) => {
   return object;
 };
 
+const operations = {
+  hasChildren:
+    (level, { key, children }) => indent(level + 1, `${key}: {\n${(renderIter(level + 2, children))}\n${indent(level + 1, '}')}`),
+  same:
+    (level, { key, value1 }) => indent(level + 1, `${key}: ${value1}`),
+  different:
+    (level, { key, value1, value2 }) => [indent(level, `- ${key}: ${stringify(level, value1)}`), indent(level, `+ ${key}: ${stringify(level, value2)}`)],
+  existsOnlyInFirst:
+    (level, { key, value1 }) => indent(level, `- ${key}: ${stringify(level, value1)}`),
+  existsOnlyInSecond:
+    (level, { key, value2 }) => indent(level, `+ ${key}: ${stringify(level, value2)}`),
+};
+
 const renderIter = (level, ast) => {
-  const sign1 = '-';
-  const sign2 = '+';
-
-  const diffStrings = ast.map(({
-    key, value1: rawValue1, value2: rawValue2, type, children,
-  }) => {
-    if (children) return indent(level + 1, `${key}: {\n${(renderIter(level + 2, children))}\n${indent(level + 1, '}')}`);
-
-    const value1 = stringify(level, rawValue1);
-    const value2 = stringify(level, rawValue2);
-
-    switch (type) {
-      case 'same': {
-        return indent(level + 1, `${key}: ${value1}`);
-      }
-      case 'different': {
-        return [indent(level, `${sign1} ${key}: ${value1}`), indent(level, `${sign2} ${key}: ${value2}`)];
-      }
-      case 'existsOnlyInFirst': {
-        return indent(level, `${sign1} ${key}: ${value1}`);
-      }
-      case 'existsOnlyInSecond': {
-        return indent(level, `${sign2} ${key}: ${value2}`);
-      }
-      default:
-        return null;
-    }
-  });
+  const diffStrings = ast.map(node => operations[node.type](level, node));
 
   return _.flatten(diffStrings).join('\n');
 };

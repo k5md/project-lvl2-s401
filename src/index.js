@@ -15,6 +15,7 @@ const genDiff = (filepath1, filepath2) => {
   const parsedContent2 = parse(extension2)(content2);
 
   const predicates = {
+    hasChildren: (object1, object2, key) => _.isObject(object1[key]) && _.isObject(object2[key]),
     existsOnlyInFirst: (object1, object2, key) => _.has(object1, key) && !_.has(object2, key),
     existsOnlyInSecond: (object1, object2, key) => _.has(object2, key) && !_.has(object1, key),
     same: (object1, object2, key) => _.has(object1, key)
@@ -32,7 +33,7 @@ const genDiff = (filepath1, filepath2) => {
       const value1 = object1[key];
       const value2 = object2[key];
       const type = _.findKey(predicates, predicate => predicate(object1, object2, key));
-      const children = (_.isObject(value1) && _.isObject(value2)) ? makeAst(value1, value2) : null;
+      const children = type === 'hasChildren' ? makeAst(value1, value2) : null;
 
       return {
         key,
