@@ -19,7 +19,7 @@ const renderIter = (level, ast, operations) => {
 
 const operations = {
   hasChildren:
-    (level, { key, children }) => indent(level + 1, `${key}: {\n${(renderIter(level + 2, children))}\n${indent(level + 1, '}')}`),
+    (level, { key, children }) => indent(level + 1, `${key}: {\n${(renderIter(level + 2, children, operations))}\n${indent(level + 1, '}')}`),
   same:
     (level, { key, value1 }) => indent(level + 1, `${key}: ${value1}`),
   different:
