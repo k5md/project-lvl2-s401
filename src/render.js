@@ -18,16 +18,16 @@ const renderIter = (level, ast, operations) => {
 };
 
 const operations = {
-  hasChildren:
+  composite:
     (level, { key, children }) => indent(level + 1, `${key}: {\n${(renderIter(level + 2, children, operations))}\n${indent(level + 1, '}')}`),
-  same:
-    (level, { key, value1 }) => indent(level + 1, `${key}: ${value1}`),
-  different:
-    (level, { key, value1, value2 }) => [indent(level, `- ${key}: ${stringify(level, value1)}`), indent(level, `+ ${key}: ${stringify(level, value2)}`)],
-  existsOnlyInFirst:
-    (level, { key, value1 }) => indent(level, `- ${key}: ${stringify(level, value1)}`),
-  existsOnlyInSecond:
-    (level, { key, value2 }) => indent(level, `+ ${key}: ${stringify(level, value2)}`),
+  changed:
+    (level, { key, value: [value1, value2] }) => [indent(level, `- ${key}: ${stringify(level, value1)}`), indent(level, `+ ${key}: ${stringify(level, value2)}`)],
+  removed:
+    (level, { key, value }) => indent(level, `- ${key}: ${stringify(level, value)}`),
+  added:
+    (level, { key, value }) => indent(level, `+ ${key}: ${stringify(level, value)}`),
+  unchanged:
+    (level, { key, value }) => indent(level, `  ${key}: ${stringify(level, value)}`),
 };
 
 const render = ast => `{\n${renderIter(1, ast, operations)}\n}`;

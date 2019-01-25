@@ -17,29 +17,29 @@ const makeAst = (object1, object2) => {
   const nodeTypes = [
     {
       predicate: key => _.isObject(object1[key]) && _.isObject(object2[key]),
-      constructor: key => makeNode(key, null, 'composite', makeAst(object1[key], object2[key])),
+      construct: key => makeNode(key, null, 'composite', makeAst(object1[key], object2[key])),
     },
     {
       predicate: key => _.has(object1, key) && !_.has(object2, key),
-      constructor: key => makeNode(key, object1[key], 'removed'),
+      construct: key => makeNode(key, object1[key], 'removed'),
     },
     {
       predicate: key => _.has(object2, key) && !_.has(object1, key),
-      constructor: key => makeNode(key, object2[key], 'added'),
+      construct: key => makeNode(key, object2[key], 'added'),
     },
     {
       predicate: key => _.has(object1, key) && _.has(object2, key) && object1[key] !== object2[key],
-      constructor: key => makeNode(key, [object1[key], object2[key]], 'changed'),
+      construct: key => makeNode(key, [object1[key], object2[key]], 'changed'),
     },
     {
       predicate: key => _.has(object1, key) && _.has(object2, key) && object1[key] === object2[key],
-      constructor: key => makeNode(key, 'unchanged'),
+      construct: key => makeNode(key, object1[key], 'unchanged'),
     },
   ];
 
   return mergedKeys.map((key) => {
-    const { constructor } = _.find(nodeTypes, ({ predicate }) => predicate(key));
-    return constructor(key);
+    const { construct } = _.find(nodeTypes, ({ predicate }) => predicate(key));
+    return construct(key);
   });
 };
 
@@ -55,6 +55,7 @@ const genDiff = (filepath1, filepath2) => {
 
   const diff = makeAst(contentObject1, contentObject2);
   const renderedDiff = render(diff);
+
   return renderedDiff;
 };
 
