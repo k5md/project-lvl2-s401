@@ -11,24 +11,17 @@ const stringify = (level, object) => {
 
 const renderIter = (level, ast) => {
   const operations = {
-    composite:
-      ({ key, children }) => indent(level, `  ${key}: ${renderIter(level + 4, children)}`),
-    changed:
-      ({ key, value: [value1, value2] }) => [
-        indent(level, `- ${key}: ${stringify(level, value1)}`),
-        indent(level, `+ ${key}: ${stringify(level, value2)}`),
-      ],
-    removed: //
-      ({ key, value }) => indent(level, `- ${key}: ${stringify(level, value)}`),
-    added:
-      ({ key, value }) => indent(level, `+ ${key}: ${stringify(level, value)}`),
-    unchanged:
-      ({ key, value }) => indent(level, `  ${key}: ${stringify(level, value)}`),
+    composite: ({ key, children }) => `  ${key}: ${renderIter(level + 4, children)}`,
+    changed: ({ key, value: [value1, value2] }) => [`- ${key}: ${stringify(level, value1)}`, `+ ${key}: ${stringify(level, value2)}`],
+    removed: ({ key, value }) => `- ${key}: ${stringify(level, value)}`,
+    added: ({ key, value }) => `+ ${key}: ${stringify(level, value)}`,
+    unchanged: ({ key, value }) => `  ${key}: ${stringify(level, value)}`,
   };
 
-  const diffStrings = ast.map(node => operations[node.type](node));
+  const diffStringsRaw = ast.map(node => operations[node.type](node));
+  const diffStrings = _.flatten(diffStringsRaw).map(string => indent(level, string));
 
-  return `{\n${_.flatten(diffStrings).join('\n')}\n${indent(level - 2, '}')}`;
+  return `{\n${diffStrings.join('\n')}\n${indent(level - 2, '}')}`;
 };
 
 const render = ast => renderIter(2, ast);
