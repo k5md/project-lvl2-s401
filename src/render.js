@@ -11,6 +11,12 @@ const stringify = (level, object) => {
   return object;
 };
 
+const renderIter = (level, ast, operations) => {
+  const diffStrings = ast.map(node => operations[node.type](level, node));
+
+  return _.flatten(diffStrings).join('\n');
+};
+
 const operations = {
   hasChildren:
     (level, { key, children }) => indent(level + 1, `${key}: {\n${(renderIter(level + 2, children))}\n${indent(level + 1, '}')}`),
@@ -24,12 +30,6 @@ const operations = {
     (level, { key, value2 }) => indent(level, `+ ${key}: ${stringify(level, value2)}`),
 };
 
-const renderIter = (level, ast) => {
-  const diffStrings = ast.map(node => operations[node.type](level, node));
-
-  return _.flatten(diffStrings).join('\n');
-};
-
-const render = ast => `{\n${renderIter(1, ast)}\n}`;
+const render = ast => `{\n${renderIter(1, ast, operations)}\n}`;
 
 export default render;
