@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import getParser from './parsers';
-import render from './render';
+import getRenderer from './renderers';
 
 const makeNode = (key, value, type, children = []) => ({
   key,
@@ -43,7 +43,7 @@ const makeAst = (object1, object2) => {
   });
 };
 
-const genDiff = (filepath1, filepath2) => {
+const genDiff = (filepath1, filepath2, format) => {
   const content1 = fs.readFileSync(path.resolve(filepath1), 'utf-8');
   const content2 = fs.readFileSync(path.resolve(filepath2), 'utf-8');
 
@@ -54,7 +54,7 @@ const genDiff = (filepath1, filepath2) => {
   const contentObject2 = getParser(extension2)(content2);
 
   const diff = makeAst(contentObject1, contentObject2);
-  const renderedDiff = render(diff);
+  const renderedDiff = getRenderer(format)(diff);
 
   return renderedDiff;
 };

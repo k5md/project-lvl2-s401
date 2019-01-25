@@ -17,7 +17,7 @@ test.each(groups)(
     const fixturePath = path.resolve(__dirname, `__fixtures__/${type}/${extension}Fixture${format}.txt`);
 
     const expectedDiff = fs.readFileSync(fixturePath, 'utf-8');
-    const actualDiff = genDiff(firstConfig, secondConfig);
+    const actualDiff = genDiff(firstConfig, secondConfig, format.toLowerCase());
 
     expect(actualDiff).toBe(expectedDiff);
   },

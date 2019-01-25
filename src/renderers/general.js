@@ -9,9 +9,9 @@ const stringify = (level, object) => {
   return _.toPairs(object).map(([key, value]) => `{\n${indent(level + 6, '')}${key}: ${stringify(level, value)}\n${indent(level, '  }')}`);
 };
 
-const renderIter = (level, ast) => {
+const render = (ast, level = 2) => {
   const operations = {
-    composite: ({ key, children }) => `  ${key}: ${renderIter(level + 4, children)}`,
+    composite: ({ key, children }) => `  ${key}: ${render(children, level + 4)}`,
     changed: ({ key, value: [value1, value2] }) => [`- ${key}: ${stringify(level, value1)}`, `+ ${key}: ${stringify(level, value2)}`],
     removed: ({ key, value }) => `- ${key}: ${stringify(level, value)}`,
     added: ({ key, value }) => `+ ${key}: ${stringify(level, value)}`,
@@ -23,7 +23,5 @@ const renderIter = (level, ast) => {
 
   return `{\n${diffStrings.join('\n')}\n${indent(level - 2, '}')}`;
 };
-
-const render = ast => renderIter(2, ast);
 
 export default render;
