@@ -1,12 +1,10 @@
 import _ from 'lodash';
 
-const indent = (level, str) => '  '.repeat(level) + str;
+const indent = (level, str) => ' '.repeat(level) + str;
 
 const stringify = (level, object) => {
   if (_.isObject(object)) {
-    return _
-      .toPairs(object)
-      .map(([key, value]) => `{\n${indent(level, '')}${key}: ${stringify(level, value)}\n${indent(level + 1, '}')}`);
+    return _.toPairs(object).map(([key, value]) => `{\n${indent(level + 6, '')}${key}: ${stringify(level, value)}\n${indent(level, '  }')}`);
   }
   return object;
 };
@@ -14,33 +12,25 @@ const stringify = (level, object) => {
 const renderIter = (level, ast) => {
   const operations = {
     composite:
-      (level, { key, children }) => {
-        return [
-          indent(level, `  ${key}: {`),
-          indent(level, `  ${renderIter(level + 2, children)}`),
-          indent(level, '  }'),
-        ];
-      },
+      ({ key, children }) => indent(level, `  ${key}: ${renderIter(level + 4, children)}`),
     changed:
-      (level, { key, value: [value1, value2] }) => {
-        return [
-          indent(level, `- ${key}: ${stringify(level, value1)}`), 
-          indent(level, `+ ${key}: ${stringify(level, value2)}`),
-        ]
-      },
-    removed:
-      (level, { key, value }) => indent(level, `- ${key}: ${stringify(level, value)}`),
+      ({ key, value: [value1, value2] }) => [
+        indent(level, `- ${key}: ${stringify(level, value1)}`),
+        indent(level, `+ ${key}: ${stringify(level, value2)}`),
+      ],
+    removed: //
+      ({ key, value }) => indent(level, `- ${key}: ${stringify(level, value)}`),
     added:
-      (level, { key, value }) => indent(level, `+ ${key}: ${stringify(level, value)}`),
+      ({ key, value }) => indent(level, `+ ${key}: ${stringify(level, value)}`),
     unchanged:
-      (level, { key, value }) => indent(level, `  ${key}: ${stringify(level, value)}`),
+      ({ key, value }) => indent(level, `  ${key}: ${stringify(level, value)}`),
   };
 
-  const diffStrings = ast.map(node => operations[node.type](level, node));
+  const diffStrings = ast.map(node => operations[node.type](node));
 
-  return _.flatten(diffStrings).join('\n');
+  return `{\n${_.flatten(diffStrings).join('\n')}\n${indent(level - 2, '}')}`;
 };
 
-const render = ast => `{\n${renderIter(1, ast)}\n}`;
+const render = ast => renderIter(2, ast);
 
 export default render;
