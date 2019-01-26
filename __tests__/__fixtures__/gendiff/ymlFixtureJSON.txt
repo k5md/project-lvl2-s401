@@ -1,0 +1,94 @@
+[
+  {
+    "key": "common",
+    "value": null,
+    "type": "composite",
+    "children": [
+      {
+        "key": "setting1",
+        "value": "Value 1",
+        "type": "unchanged",
+        "children": []
+      },
+      {
+        "key": "setting2",
+        "value": 200,
+        "type": "removed",
+        "children": []
+      },
+      {
+        "key": "setting3",
+        "value": [
+          true,
+          {
+            "key": "value"
+          }
+        ],
+        "type": "changed",
+        "children": []
+      },
+      {
+        "key": "setting6",
+        "value": {
+          "key": "value"
+        },
+        "type": "removed",
+        "children": []
+      },
+      {
+        "key": "follow",
+        "value": false,
+        "type": "added",
+        "children": []
+      }
+    ]
+  },
+  {
+    "key": "group1",
+    "value": null,
+    "type": "composite",
+    "children": [
+      {
+        "key": "baz",
+        "value": "bas",
+        "type": "unchanged",
+        "children": []
+      },
+      {
+        "key": "foo",
+        "value": "bar",
+        "type": "unchanged",
+        "children": []
+      },
+      {
+        "key": "nest",
+        "value": null,
+        "type": "composite",
+        "children": [
+          {
+            "key": "key",
+            "value": "value",
+            "type": "unchanged",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "group2",
+    "value": {
+      "abc": 12345
+    },
+    "type": "removed",
+    "children": []
+  },
+  {
+    "key": "group3",
+    "value": {
+      "fee": 100500
+    },
+    "type": "added",
+    "children": []
+  }
+]

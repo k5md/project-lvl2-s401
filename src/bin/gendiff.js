@@ -8,9 +8,9 @@ program
   .version(version)
   .arguments('<firstConfig> <secondConfig>')
   .description('Compares two configuration files and shows the difference.')
-  .option('-f, --format [type]', 'output format [general|plain]', 'general')
+  .option('-f, --format [type]', 'output format [general|plain|json]', 'general')
   .action((firstConfig, secondConfig) => {
-    const formatType = program.format;
+    const formatType = program.format || 'general';
     const diff = genDiff(firstConfig, secondConfig, formatType);
     console.log(diff);
   })
