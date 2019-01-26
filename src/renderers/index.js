@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import general from './general';
 import plain from './plain';
 import json from './json';
@@ -8,4 +9,11 @@ const renderers = {
   json,
 };
 
-export default format => renderers[format];
+const getRenderer = (format) => {
+  if (!_.has(renderers, format)) {
+    throw new Error('unsupported output format');
+  }
+  return renderers[format];
+};
+
+export default getRenderer;
