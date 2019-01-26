@@ -1,3 +1,3 @@
-const render = ast => JSON.stringify(ast, null, 2);
+const render = ast => JSON.stringify(ast, null, '');
 
 export default render;
